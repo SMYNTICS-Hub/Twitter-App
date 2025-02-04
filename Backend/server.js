@@ -3,19 +3,17 @@ import auth from "./routes/auth.route.js";
 import dotenv from "dotenv";
 import MongoConnect from "./Db/MongoConnect.js";
 
-const app = express();
-
 //Loading env variables
 dotenv.config();
 
-//PORT
-const PORT = process.env.PORT;
+const app = express();
+const PORT = process.env.PORT; //PORT
 
-//MongoDB Connection
-MongoConnect();
+MongoConnect(); //MongoDB Connection
 
 //Middleware
 app.use("/api/auth", auth);
+app.use(express.json()); //to parse req.body
 
 //Start server
 app.listen(PORT, () => {
