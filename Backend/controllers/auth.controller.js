@@ -35,6 +35,11 @@ export const signup = async (req, res) => {
       email,
       hashedPassword,
     });
+
+    if (newUser) {
+      generateTokenAndSetCookie(newUser._id, res);
+      await newUser.save();
+    }
   } catch (error) {
     console.log("Error in signup controller");
     return res.status(500).json({ error: "Internal server error!" });
