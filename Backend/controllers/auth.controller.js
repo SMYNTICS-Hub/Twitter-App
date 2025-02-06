@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import User from "../models/userModel";
+import User from "../models/userModel.js";
 import bcrypt from "bcryptjs";
 
 export const signup = async (req, res) => {
@@ -22,6 +22,10 @@ export const signup = async (req, res) => {
     const existingEmail = await mongoose.findOne({ email });
     if (existingEmail) {
       return res.status(400).json({ error: "The email is already taken!" });
+    }
+
+    if (password.length <= 6) {
+      res.status(400).json({ error: "Password length should be six or more!" });
     }
 
     //Hashing password

@@ -37,15 +37,15 @@ const userSchema = new mongoose.Schema(
       default: "",
     },
     coverImg: {
-      type: string,
+      type: String,
       default: "",
     },
     bio: {
-      type: string,
+      type: String,
       default: "",
     },
     link: {
-      type: string,
+      type: String,
       default: "",
     },
   },
