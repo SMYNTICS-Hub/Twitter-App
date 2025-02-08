@@ -12,8 +12,9 @@ const PORT = process.env.PORT; //PORT
 MongoConnect(); //MongoDB Connection
 
 //Middleware
-app.use("/api/auth", auth);
 app.use(express.json()); //to parse req.body
+app.use(express.urlencoded({ extended: true })); //to parse form data
+app.use("/api/auth", auth);
 
 //Start server
 app.listen(PORT, () => {

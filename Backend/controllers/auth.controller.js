@@ -4,7 +4,8 @@ import bcrypt from "bcryptjs";
 
 export const signup = async (req, res) => {
   try {
-    const [username, email, fullname, password] = req.body;
+    console.log(req.body);
+    const { username, email, fullname, password } = req.body;
 
     //email validation
     let regx = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
@@ -55,8 +56,8 @@ export const signup = async (req, res) => {
       coverImg: newUser.coverImg,
     });
   } catch (error) {
-    console.log("Error in signup controller");
-    return res.status(500).json({ error: "Internal server error!" });
+    console.log("Error in signup controller. \n Error: " + error);
+    return res.status(500).json({ error: "Internal server error! " + error });
   }
 };
 
