@@ -4,12 +4,11 @@ import bcrypt from "bcryptjs";
 
 export const signup = async (req, res) => {
   try {
-    console.log(req.body);
     const { username, email, fullname, password } = req.body;
 
     //email validation
     let regx = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-    if (email != regx.test) {
+    if (!regx.test(email)) {
       return res.status(400).json({ error: "The email is not valid!" });
     }
 
