@@ -14,3 +14,5 @@ const generateTokenAndSetCookie = (userId, res) => {
     secure: process.env.NODE_EnC !== " development",
   });
 };
+
+export default generateTokenAndSetCookie;

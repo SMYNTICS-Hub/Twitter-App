@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 import User from "../models/userModel.js";
 import bcrypt from "bcryptjs";
-
+import generateTokenAndSetCookie from "../Lib/Utils/generateTokenAndSetCookie.js";
 export const signup = async (req, res) => {
   try {
     const { username, email, fullname, password } = req.body;
@@ -13,13 +13,13 @@ export const signup = async (req, res) => {
     }
 
     //userProfile validation
-    const existingUser = await mongoose.findOne({ username });
+    const existingUser = await User.findOne({ username });
     if (existingUser) {
       return res.status(400).json({ error: "The username is already taken!" });
     }
 
     //emailProfile validation
-    const existingEmail = await mongoose.findOne({ email });
+    const existingEmail = await User.findOne({ email });
     if (existingEmail) {
       return res.status(400).json({ error: "The email is already taken!" });
     }
@@ -30,14 +30,14 @@ export const signup = async (req, res) => {
 
     //Hashing password
     const salt = await bcrypt.genSalt(10);
-    const hashedPassword = bcrypt.hash(password, salt);
+    const hashedPassword = await bcrypt.hash(password, salt);
 
     //creating new user
-    newUser = new User({
+    const newUser = new User({
       fullname,
       username,
       email,
-      hashedPassword,
+      password: hashedPassword,
     });
 
     if (newUser) {
@@ -55,7 +55,7 @@ export const signup = async (req, res) => {
       coverImg: newUser.coverImg,
     });
   } catch (error) {
-    console.log("Error in signup controller. \n Error: " + error);
+    console.log("Error in signup controller. \nError: " + error.message);
     return res.status(500).json({ error: "Internal server error! " + error });
   }
 };
