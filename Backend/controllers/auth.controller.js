@@ -55,19 +55,39 @@ export const signup = async (req, res) => {
       coverImg: newUser.coverImg,
     });
   } catch (error) {
-    console.log("Error in signup controller. \nError: " + error.message);
+    console.log("Error in signup. \nError: " + error.message);
     return res.status(500).json({ error: "Internal server error! " + error });
   }
 };
 
 export const login = async (req, res) => {
-  res.json({
-    message: "login successful!",
-  });
+  try {
+    const { username, password } = req.body;
+    const user = await User.findOne({ username });
+    const isPasswordCorrect = await bcrypt.compare(
+      password,
+      user?.password || ""
+    );
+
+    if (!user || !isPasswordCorrect) {
+      return res.status(400).json({ error: "Invalid credentials!" });
+    }
+    generateTokenAndSetCookie(user._id, res);
+
+    res.status(200).json({
+      _id: user._id,
+      fullname: user.fullname,
+      username: user.username,
+      email: user.email,
+      followers: user.followers,
+      following: user.following,
+      profileImg: user.profileImg,
+      coverImg: user.coverImg,
+    });
+  } catch (error) {
+    console.log("Error in login. \nError: " + error.message);
+    return res.status(500).json({ error: "Internal server error! " + error });
+  }
 };
 
-export const logout = async (req, res) => {
-  res.json({
-    message: "logout successful!",
-  });
-};
+export const logout = async (req, res) => {};
