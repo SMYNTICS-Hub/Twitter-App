@@ -100,3 +100,13 @@ export const logout = async (req, res) => {
     return res.status(500).json({ error: "Internal server error! " + error });
   }
 };
+
+export const getMe = async (req, res) => {
+  try {
+    const user = await User.findById(req.user._id).select("-password");
+    return res.status(200).json(user);
+  } catch (error) {
+    console.log("Error in getMe controller. \nError: " + error);
+    return res.status(500).json({ error: "Internal server error! " + error });
+  }
+};
