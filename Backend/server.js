@@ -1,5 +1,8 @@
 import express from "express";
-import auth from "./routes/auth.route.js";
+
+import authRoutes from "./routes/auth.route.js";
+import userRoutes from "./routes/user.route.js";
+
 import dotenv from "dotenv";
 import mongoose from "mongoose";
 import MongoConnect from "./Db/MongoConnect.js";
@@ -18,7 +21,8 @@ app.use(express.json()); //to parse req.body
 app.use(express.urlencoded({ extended: true })); //to parse form data
 app.use(cookieParser()); //to parse cookies
 
-app.use("/api/auth", auth);
+app.use("/api/auth", authRoutes);
+app.use("/api/users", userRoutes);
 
 //Start server
 const server = app.listen(PORT, () => console.log(`Server running on ${PORT}`));
