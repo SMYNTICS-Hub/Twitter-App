@@ -26,3 +26,28 @@ app.use("/api/users", userRoutes);
 
 //Start server
 const server = app.listen(PORT, () => console.log(`Server running on ${PORT}`));
+
+//graceful shutdown
+const exitHandler = async () => {
+  console.log("Shutting down server...");
+
+  try {
+    // Close the server gracefully
+    await new Promise((resolve) => server.close(resolve));
+    console.log("Server closed");
+
+    // Close the database connection
+    await mongoose.connection.close();
+    console.log("MongoDB connection closed.");
+
+    // Exit process
+    process.exit(0);
+  } catch (err) {
+    console.error("Error during shutdown:", err);
+    process.exit(1);
+  }
+};
+
+// Listen for termination signals
+process.on("SIGINT", exitHandler); // Ctrl + C
+process.on("SIGTERM", exitHandler); // Nodemon restarts
